@@ -155,7 +155,7 @@
 <body>
 	<div class="container">
 		<article style="margin-top:0px;">
-			<header class="title">申请单信息</header>
+			<header class="title" id="title">申请单信息</header>
 			<div class="title-detail list-detail">
 				<div class="layui-row borde">
 					<div class="layui-col-xs3">
@@ -841,14 +841,15 @@
 							icon: 7,
 							time: 1500
 						});
-						// $('#bn_Approve_E').show();
 					} else {
 						layer.msg('审批提交成功！', {
 							icon: 1,
 							time: 2000
+						},function(){
+							window.location.href ='./success.html'
 						});
 
-						location.reload()
+					
 					}
 				});
 			}
@@ -856,6 +857,9 @@
 			/* 	$("#bn_pass_A").on('click',function(){
 					
 				}) */
+				$("#title").on('click',function(){
+					
+				})
 			form.on('submit(bn_pass_A)', function (data) {
 				console.log(data)
 				if (data.field.authorizationCode == "") {
