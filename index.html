@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum=1.0,user-scalable=no">
+	<!-- <meta content="telephone=no" name="format-detection"/> -->
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	
+	<title>蚂蚁外贸付款审批</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0
+		}
+
+		.borde {
+			/* border-bottom: 1px solid #eee; */
+			padding: 8px 2px;
+			margin: 2px 0px;
+    background-color: #fff;
+		}
+
+		.container {
+			width: 100%;
+			padding: 0px 2px 0px;
+		}
+		::-webkit-scrollbar{
+			display: none;
+		}
+		/* 	html,
+		body {
+		 	height:100%;
+			position: absolute;
+			top:0;
+			left:0; 
+			overflow: hidden;
+			width: 100%;
+			overflow-y: auto;
+		} */
+		body{
+		/* 	font-family: "PingFangSC-Regular", "Microsoft YaHei", Helvetica; */
+			color: #333333;
+			background: #f5f7f9;
+		}
+		html {
+			overflow-y: scroll;
+			width: 100%
+		}
+
+		:root {
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		:root body {
+			position: absolute;
+		}
+
+		body {
+			width: 100vw;
+			overflow: hidden;
+		}
+
+		.monspan::before {
+			content: "￥"
+		}
+
+		.check-advice-action {
+			text-align: center;
+			padding: 15px 0px;
+		}
+
+		.showList[lay-size=sm] th,
+		.showList[lay-size=sm] td {
+			font-size: 12px;
+			padding: 5px 10px;
+			min-height: 20px;
+			line-height: 20px;
+			border-width: 1px;
+			border-style: solid;
+			border-color: #e6e6e6;
+			text-align: left;
+			font-weight: 400;
+		}
+		article {
+			background: #fff;
+			margin: 16px 0px;
+			padding: 10px 2px
+		}
+		.list-detail {
+			padding-left: 7px;
+			background: #f5f7f9;
+		}
+		.scrollACtion{
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+		.title{
+			padding: 4px 0px;
+    		font-size: 16px;
+			position: relative;
+			padding-left: 7px;
+			border-bottom: 2px solid #f5f7f9;
+		}
+		.title::before{
+			content: "";
+			width: 7px;
+			height: 15px;
+			background-color: #1E9FFF;
+			position: absolute;
+			left: 0px;
+			top: 7px;
+		}
+		@media screen and (min-width:321px) and (max-width:375px) {
+			html {
+				font-size: 11px
+			}
+			.title{
+				font-size: 16px;
+			}
+		}
+
+		@media screen and (min-width:376px) and (max-width:414px) {
+			html {
+				font-size: 12px
+			}
+			.title{
+				font-size: 16px;
+			}
+		}
+
+		@media screen and (min-width:415px) and (max-width:639px) {
+			html {
+				font-size: 15px
+			}
+			.title{
+				font-size: 16px;
+			}
+		}
+
+		@media screen and (min-width:640px) and (max-width:719px) {
+			html {
+				font-size: 20px
+			}
+			.title{
+				font-size: 26px;
+			}
+		}
+
+		
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<article style="margin-top:0px;">
+			<header class="title">申请单信息</header>
+			<div class="title-detail list-detail">
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">申请编号:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="FKCode"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">业务委托号:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="OrderNumer"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">客户名称:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="CustName"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">付款类别:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="PayType"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">支付方式:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="PayWays"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">收款人:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="SKName"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">收款银行:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="SKBank"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">付款金额:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="PayAmt"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">收款账号:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="SKAccount"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">币别:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="BZType"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">用途:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="UsedNote"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">申请部门:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="Department"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">备注:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="Notes"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">单证状态:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="stat"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">创建时间:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="BillDate"></span>
+					</div>
+
+				</div>
+				<div class="layui-row borde">
+					<div class="layui-col-xs3">
+						<span for="">申请人:</span>
+					</div>
+					<div class="layui-col-xs8">
+						<span id="BillName"></span>
+					</div>
+
+				</div>
+
+			</div>
+		</article>
+
+		<article class="payment" > <!-- style="padding:16px 0px;" -->
+			<div class="title">付款明细</div>
+			<!-- <div class="swiper-container" id="payment-tab">
+						<div class="swiper-wrapper">  -->
+			<div class="payment-tab scrollACtion list-detail" >
+				<!-- style="overflow-x:auto;text-align: center;" -->
+				<table class="showList" lay-size="sm" style="width:300%">
+					<thead>
+						<tr>
+							<th width="10%">序号</th>
+							<th width="">费用明细</th>
+							<th>订单号</th>
+							<th>客户名称</th>
+							<th>付款金额</th>
+							<th>货币</th>
+							<th>预估汇率</th>
+							<th>折合金额</th>
+						</tr>
+					</thead>
+					<tbody id="payment_list">
+
+					</tbody>
+				</table>
+			</div>
+			
+		</article>
+		<article >  <!--  style="margin-top:10px;" -->
+			<div class="title">业务核算~<span class="check-title" style="font-size:12px;">核算单信息</span></div>
+			<div class="check list-detail">
+				<div class="check-detail">
+					
+					<div class="check-content">
+						<div class="layui-row borde">
+							<div class="layui-col-xs3">
+								<span for="">业务编号:</span>
+							</div>
+							<div class="layui-col-xs7">
+								<span id="OrderId_H"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs3">
+								<span for="">结算方:</span>
+							</div>
+							<div class="layui-col-xs7">
+								<span id="FKCom_H">董董科技有限公司</span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs3">
+								<span for="">委托方:</span>
+							</div>
+							<div class="layui-col-xs7">
+								<span id="SKCom_H"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs4">
+								<span for="">业务类型:</span>
+							</div>
+							<div class="layui-col-xs8">
+								<span id="TypeName_H"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs4">
+								<span for="">商品名称:</span>
+							</div>
+							<div class="layui-col-xs8">
+								<span id="ItemType_H"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs4">
+								<span for="">结算方账户余额:</span>
+							</div>
+							<div class="layui-col-xs8">
+								<span id="HXunAmt_H"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs4">
+								<span for="">应收结算余额:</span>
+							</div>
+							<div class="layui-col-xs8">
+								<span id="JsuanBalanceShou"></span>
+							</div>
+						</div>
+						<div class="layui-row borde">
+							<div class="layui-col-xs4">
+								<span for="">实收结算余额:</span>
+							</div>
+							<div class="layui-col-xs8">
+								<span id="JsuanBalance"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+		<article class="accountReceivable" >   <!-- style="margin-top:20px;" -->
+			<div class="rec-title">
+				<div class="title">应收费用</div>
+				<div class="rec-pay list-detail">
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span for="">应收折合金额合计:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="YszhTotalAmt" class="monspan"></span>
+						</div>
+					</div>
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span for="">实收折合金额合计:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="SszhTotalAmt" class="monspan"></span>
+						</div>
+					</div>
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span>收款差异:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="CyTotalAmountpart"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="rec-list scrollACtion list-detail" >
+				<table class="showList" lay-size="sm" style="width:300%">
+					<thead>
+						<tr>
+							<th>费用明细</th>
+							<th>付款方</th>
+							<th>币别</th>
+							<th>应收金额</th>
+							<th>应收折合金额(￥)</th>
+							<th>实收金额</th>
+							<th>实收折合金额(￥)</th>
+							<th>收款时间</th>
+							<th>收款差异</th>
+						</tr>
+					</thead>
+					<tbody id="rec-list-detail">
+
+					</tbody>
+				</table>
+			</div>
+		</article>
+		<article class="accountsPayable" >   <!-- style="margin-top:20px;" -->
+			<div class="rec-title">
+				<div class="title ">应付费用</div>
+				<div class="rec-pay list-detail">
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span for="">应付折合金额合计:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="TotalYFAmtlayero" class="monspan"></span>
+						</div>
+					</div>
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span for="">实付折合金额合计:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="SfTotalAmtlayero" class="monspan"></span>
+						</div>
+					</div>
+					<div class="layui-row borde">
+						<div class="layui-col-xs6">
+							<span>收款差异:</span>
+						</div>
+						<div class="layui-col-xs6">
+							<span id="cyTotalAmtlayero"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pay-list scrollACtion list-detail" >
+
+				<table class="showList" lay-size="sm" style="width:300%">
+					<thead>
+						<tr>
+							<th>费用明细</th>
+							<th>收款方</th>
+							<th>币别</th>
+							<th>应付金额</th>
+							<th>汇率</th>
+							<th>应付折合金额(￥)</th>
+							<th>实付金额</th>
+							<th>汇率</th>
+							<th>实付折合金额(￥) </th>
+							<th>支付时间</th>
+							<th>付款差异</th>
+						</tr>
+					</thead>
+					<tbody id="pay-list-detail">
+
+					</tbody>
+				</table>
+			</div>
+		</article>
+			<article class="cheeck-pass" style="margin-bottom:0px;padding-bottom: 26px;">
+			<div class="title">审核</div>
+			<div class="check-advice list-detail">
+				<div class="checkInfo">
+						<table class="layui-table details" lay-skin="nob" style="margin-top :-5px;">
+								<tr>
+									<td>审核人</td>
+									<td><label id="Approver_A"></label></td>
+									
+								</tr>
+								<tr>
+									<td>级别</td>
+									<td><label id="Level_A"></label></td>
+								</tr>
+								<tr>
+									<td>审核时间</td>
+									<td><label id="Date_A"></label></td>
+									
+								</tr>
+									<td><label id="UserId" style="display:none;"></label></td>
+									<td><label id="SetOSID" style="display:none;"></label></td>
+									<td><label id="MaxLevel" style="display:none;"></label></td>
+									<td><label id="BatchNumber" style="display:none;"></label></td>
+								
+							</table>
+				</div>	
+				<div class="check-title">审核意见</div>
+				<form class="layui-form" onsubmit="return false;">
+					<textarea name="Notes" id="ApproveNotes" rows="3" style="width:100%;padding:0px 5px;resize: none" class="layui-textarea"></textarea>
+					<div class="layui-row" style="height: 38px;line-height: 38px;padding: 15px 0px;">
+						<div class="layui-col-xs3">
+							请输入授权码
+						</div>
+						<div class="layui-col-xs8">
+							<input type="text" name="authorizationCode" id="authorizationCode" placeholder="请输入授权码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-row" style="text-align:center;">
+						<div class="layui-col-xs6">
+							<button class="layui-btn layui-btn-radius  layui-btn-lg  layui-btn-normal" id="bn_pass_A" lay-submit lay-filter="bn_pass_A">通过</button>
+						</div>
+						<div class="layui-col-xs6">
+							<button class="layui-btn  layui-btn-lg  layui-btn-radius" id="bn_nopass_A" lay-filter="bn_nopass_A">不通过</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</article>
+	</div>
+	
+	<script src="./layui/layui.js"></script>
+	<script>
+		var host = "https://www.easy-mock.com/mock/5bc42e99bfb15a644e2c599d";
+
+		layui.use(['jquery', 'layer', 'form'], function () {
+			var $ = layui.jquery;
+			var layer = layui.layer;
+			var form = layui.form;
+			var OSID = "9b8c1ad5-6737-4243-9f86-4bbc6a603f33";
+			var FOSID = "JYD-E18080003";
+			var HJType = 'HX';
+			//申请单信息
+			// $.post(host+'/impay/QueryGetPayApplyInfo',{OSID:OSID},function(data){
+			// 	//var data =JSON.parse(data);
+			// 	if(data.length!=0){
+			// 		$.each(data[0],function(index,items){
+			// 			if(index=="stat"){
+			// 				if(items=="1"){
+			// 					items="未审批"
+			// 				}
+			// 				if(items=="2"){
+			// 					items="已审批"
+			// 				}
+			// 			}
+			// 			$("#"+index).text(items)
+			// 		})
+			// 	}
+			// })
+			var layerindex;
+			$.ajax({
+				url: host + '/impay/QueryGetPayApplyInfo',
+				type: 'post',
+				data: {
+					OSID: OSID
+				},
+				beforeSend: function () {
+					//layerindex =layer.load()
+				},
+				success: function (data) {
+					// 	//var data =JSON.parse(data);
+					if (data.length != 0) {
+						$.each(data[0], function (index, items) {
+							if (index == "stat") {
+								if (items == "1") {
+									items = "未审批"
+								}
+								if (items == "2") {
+									items = "已审批"
+								}
+							}
+							$("#" + index).text(items)
+						})
+
+					}
+				},
+				complete: function () {
+					//layer.close(layerindex);
+
+				}
+			})
+			getPaymentDetail(); //付款明细
+			getCheckdetail(); //核算单信息
+			//GetJYDFeeListHead();//应收费用
+			//GetJYDYFeedListHead(); //应付费用
+			payOrrec(); //应收应付
+			GetCheckInfo(); //通过信息检验
+			//付款明细
+			function getPaymentDetail() {
+				$.post(host + '/impay/QueryApplyListEdit', {
+					OSID: OSID
+				}, function (data) {
+					//	var data =JSON.parse(data);
+					var html;
+					$.each(data, function (index, items) {
+						html += '<tr>' + '<td>' + (index + 1) + '</td>' +
+							'<td>' + items.ItemName + '</td>' +
+							'<td>' + items.OrderId + '</td>' +
+							'<td>' + items.CName + '</td>' +
+							'<td>' + items.PayAmt + '</td>' +
+							'<td>' + items.BZType + '</td>' +
+							'<td>' + items.HL_yg + '</td>' +
+							'<td>' + items.YGAmt + '</td>' +
+							'</tr>'
+
+					})
+					$("#payment_list").html(html)
+				})
+			}
+			//核算单信息
+			function getCheckdetail() {
+				$.post(host + '/impay/GetHXedHeadInfo', function (data) {
+					//	var data =JSON.parse(data);
+					$.each(data[0], function (index, items) {
+						if (index == 'HXunAmt') {
+							items = parseFloat(items).toFixed(2)
+						}
+						$("#" + index + "_H").text(items)
+					})
+				})
+			}
+			//应收费用
+			function GetJYDFeeListHead(cb) {
+				var YfTotalAmountpart = 0; //应收折合金额
+				var SsTotalAmountpart = 0; //实收折合金额
+				var CyTotalAmountpart = 0; //收款差异
+				var YszhTotalAmt = 0; //应收折合金额(￥)
+				var SszhTotalAmt = 0; //实收折合金额(￥)
+				$.get(host + '/impay/GetJYDFeeListHead', {
+					OSID: OSID
+				}, function (data) {
+					//	var data =JSON.parse(data);
+					var html;
+					var tdHXAmt = "0.00"; //应收折合金额
+					var chayi = "" //收款差异
+					$.each(data, function (index, items) {
+						var amt = parseFloat(items.YGAmt) - parseFloat(items.Amt);
+						YfTotalAmountpart += parseFloat(items.Amt);
+						SsTotalAmountpart += parseFloat(items.YGAmt);
+						CyTotalAmountpart += amt;
+						YszhTotalAmt += items.Amt * items.HL_Rate; //应收折合金额(￥)
+						SszhTotalAmt += parseFloat(items.ShiShouAmt); //实收折合金额(￥)
+						html += '<tr>' + '<td>' + items.FeeTypeName + '</td>' +
+							'<td>' + items.FKCom + '</td>' +
+							'<td>' + items.ItemName + '</td>' +
+							'<td><span style="color:red;font-size:medium">' + items.ItemType + "</span>" + parseFloat(items.Amt).toFixed(
+								2) + '</td>' +
+							'<td>' + (items.Amt * items.HL_Rate).toFixed(2) + '</td>' + //应收折合金额
+							'<td><span style="color:red;font-size:medium">' + items.ItemType + "</span> " + parseFloat(items.YGAmt).toFixed(
+								2) + '</td>' + //实收金额
+							'<td>' + parseFloat(items.ShiShouAmt).toFixed(2) + '</td>' + //实收折合金额
+							'<td>' + items.CheckDate + '</td>' +
+							'<td><span style="color:red;font-size:medium">' + items.ItemType + "</span> " + parseFloat(amt).toFixed(2) +
+							'</td>' +
+							'</tr>'
+
+					})
+					$("#rec-list-detail").html(html);
+					$('#YszhTotalAmt').html(parseFloat(YszhTotalAmt).toFixed(2)); //应收折合金额(￥)
+					$('#SszhTotalAmt').html(parseFloat(SszhTotalAmt).toFixed(2)); //实收折合金额(￥)
+					$('#CyTotalAmountpart').html(parseFloat(CyTotalAmountpart).toFixed(2)); //收款差异
+					YfTotalAmountpart = parseFloat(YszhTotalAmt).toFixed(2);
+					SsTotalAmountpart = parseFloat(SszhTotalAmt).toFixed(2);
+					typeof cb == 'function' && cb(YfTotalAmountpart, SsTotalAmountpart);
+				})
+
+			}
+			//应付费用  /impay/GetJYDYFeedListHead
+			function GetJYDYFeedListHead(cb) {
+				var TotalYFAmtlayero = 0; //应付折合金额(￥)
+				var SfTotalAmtlayero = 0; //实付折合金额(￥)
+				var cyTotalAmtlayero = 0; //付款差异
+				$.get(host + '/impay/GetJYDYFeedListHead', {
+					FOSID: FOSID
+				}, function (data) {
+					var html;
+					$.each(data, function (index, items) {
+						var type = items.TypeId;
+						var AmtVal = items.PayAmt;
+						var money = 0;
+						var cymoney = 0;
+						var Rmbhl = items.HL_Rate;
+						if (type == "222") {
+							AmtVal = items.TotleAmt;
+						}
+
+						money = (parseFloat(AmtVal) * parseFloat(Rmbhl)).toFixed(2);
+
+						//if (data[Number(j)].TypeId!=items.TypeId) {
+						TotalYFAmtlayero += parseFloat(money);
+						//}
+
+
+						var Payed = items.YGAmt;
+						//var PayedHL = items.HL_sj;
+						//if (Payed == 0) {
+						//    Payed = items.PayAmt;
+						//    PayedHL = items.HL_yg;
+						//} 
+						var PayedAmount = parseFloat(Payed) * parseFloat(items.HL_Rate);
+						SfTotalAmtlayero += PayedAmount;
+						cymoney = parseFloat(PayedAmount) - parseFloat(money);
+						cyTotalAmtlayero += parseFloat(cymoney);
+						html += '<tr>' + '<td>' + items.SName + '</td>' +
+							'<td>' + items.CName + '</td>' +
+							'<td>' + items.ItemName + '</td>' +
+							'<td><span style="color:red;font-size:larger">' + items.ItemType + '</span>' + parseFloat(AmtVal).toFixed(
+								2) + '</td>' + //应付金额
+							'<td>' + parseFloat(Rmbhl).toFixed(4) + '</td>' + //汇率
+							'<td>' + +parseFloat(money).toFixed(2) + '</td>' + //应付折合金额(￥)
+							'<td><span style="color:red;font-size:larger">' + items.ItemType + '</span>' + parseFloat(Payed).toFixed(2) +
+							'</td>' +
+							'<td>' + parseFloat(items.HL_sj).toFixed(4) + '</td>' +
+							'<td>' + PayedAmount.toFixed(2) + '</td>' + //实付折合金额(￥)	
+							'<td>' + items.CheckDate + '</td>' + //支付时间
+							'<td><span style="color:red;font-size:larger">￥</span>' + parseFloat(cymoney).toFixed(2) + '</td>' + //付款差异
+							'</tr>'
+
+					})
+
+					$("#pay-list-detail").html(html);
+					//	totalAmonypart = parseFloat(SsTotalAmountpart) - parseFloat(SfTotalAmtlayero);
+
+					//    $("#JsuanBalance").html((parseFloat(SszhTotalAmt) - parseFloat(SfTotalAmtlayero)).toFixed(2));     //实收结算余额 = 实收折合金额 - 实付折合金额
+					//    $("#JsuanBalanceShou").html((parseFloat(YszhTotalAmt) - parseFloat(TotalYFAmtlayero)).toFixed(2));     //  应收结算余额 = 应收折合金额 - 应付折合金额
+
+					$('#TotalYFAmtlayero').html(parseFloat(TotalYFAmtlayero).toFixed(2)); //应付折合金额(￥)
+					$('#SfTotalAmtlayero').html(parseFloat(SfTotalAmtlayero).toFixed(2)); //实付折合金额(￥)
+					$('#cyTotalAmtlayero').html(parseFloat(cyTotalAmtlayero).toFixed(2)); //收款差异
+					TotalYFAmtlayero = parseFloat(TotalYFAmtlayero).toFixed(2);
+					SfTotalAmtlayero = parseFloat(SfTotalAmtlayero).toFixed(2);
+					typeof cb == 'function' && cb(TotalYFAmtlayero, SfTotalAmtlayero);
+				})
+
+			}
+			//控制应收应付执行顺序
+			function payOrrec() {
+				GetJYDFeeListHead(function (YfTotalAmountpart, SsTotalAmountpart) { //应收费用
+					GetJYDYFeedListHead(function (TotalYFAmtlayero, SfTotalAmtlayero) { //应付费用  
+						$("#JsuanBalanceShou").html((parseFloat(YfTotalAmountpart) - parseFloat(TotalYFAmtlayero)).toFixed(2)); //实收结算余额 = 实收折合金额 - 实付折合金额
+						$("#JsuanBalance").html((parseFloat(SsTotalAmountpart) - parseFloat(SfTotalAmtlayero)).toFixed(2)); //  应收结算余额 = 应收折合金额 - 应付折合金额
+					})
+				})
+			}
+			//检查当前需要审核的信息，是否和当前用户一致
+			function GetCheckInfo() {
+				$.get(host + '/impay/GetApproveInfo', {
+					OSID: OSID
+				}, function (result, status) {
+					// var data = JSON.parse(result);
+					var data = result;
+					if (data != null && data.length > 0) {
+						if (data[0].BillName == data[0].COSID) {
+							//$('#Department_A').val();
+							$('#Approver_A').text(data[0].UserName);
+							$('#Date_A').text(data[0].CheckDate.replace(/T/g, ' '));
+							$('#Level_A').text(data[0].SetLevel);
+							$('#UserId').text(data[0].COSID);
+							$('#MaxLevel').text(data[0].MaxLevel);
+							$('#BatchNumber').text(data[0].BatchNumber);
+							$('#SetOSID').text(data[0].OSID); //申请设置OSID
+							return true;
+						} else {
+							layer.msg('该单此节点没有设定您审批！', {
+								icon: 5,
+								time: 1500
+							});
+							$("#dApplyArea").hide();
+							return false;
+						}
+					}
+				});
+				return true;
+			}
+			//提交审批结果
+			function ApplyCheck(result, code) {
+				var applylist = [];
+				var postdata = [];
+				var temp = {
+					OSID: OSID, //申请单OSID
+					FOSID: $('#SetOSID').text(), //申请设置OSID
+					COSID: $('#UserId').text(), //审批人 OSID
+					SetLevel: $('#Level_A').text(), //审批级别
+					Result: result, //审批结果
+					BatchNumber: $('#BatchNumber').text(), //审批批次
+					Notes: $('#ApproveNotes').val(), //审批意见
+					MaxLevel: $('#MaxLevel').text(), //最高审批级别
+					ApplyType: HJType,
+					authorizationCode: code
+				}
+				postdata.push(temp);
+				var data = {
+					postdata: JSON.stringify(postdata)
+				};
+				// $('#bn_Approve_E').hide();
+				$.post(host + '/impay/CheckPayApply', data, function (result) {
+					if (result.IsError) {
+						layer.msg(result.ErrorMessage, {
+							icon: 7,
+							time: 1500
+						});
+						// $('#bn_Approve_E').show();
+					} else {
+						layer.msg('审批提交成功！', {
+							icon: 1,
+							time: 2000
+						});
+
+						location.reload()
+					}
+				});
+			}
+			//审核通过
+			/* 	$("#bn_pass_A").on('click',function(){
+					
+				}) */
+			form.on('submit(bn_pass_A)', function (data) {
+				console.log(data)
+				if (data.field.authorizationCode == "") {
+					layer.msg('请输入授权码', {
+						icon: 5,
+						anim: 2
+					})
+					return false;
+				}
+				ApplyCheck('Y', data.field.authorizationCode);
+				/* var userAgent = navigator.userAgent; 
+				if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) { 
+				window.location.href="about:blank"; 
+				}else if(userAgent.indexOf('Android') > -1 || userAgent.indexOf('Linux') > -1){ 
+				window.opener=null;window.open('about:blank','_self').close(); 
+				}else { 
+				window.opener = null; 
+				window.open('about:blank','_self'); 
+				window.close();  
+				} */
+
+			});
+			//审核不通过
+			$("#bn_nopass_A").on('click', function () {
+				var remark = $("#ApproveNotes").val().trim();
+				var authorizationCode = $("#authorizationCode").val().trim();
+				if (remark == "") {
+					layer.msg('请填写审核意见', {
+						icon: 5,
+						anim: 2
+					})
+					return false;
+				}
+				if (authorizationCode == "") {
+					layer.msg('请输入授权码', {
+						icon: 5,
+						anim: 2
+					})
+					return false;
+				}
+				ApplyCheck('N', authorizationCode);
+			})
+			return false;
+		})
+	</script>
+</body>
+
+</html>
